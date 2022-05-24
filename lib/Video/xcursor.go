@@ -65,13 +65,13 @@ import (
 	"unsafe"
 )
 
-func Init() {
+func CursorInit() {
 	display := os.Getenv("DISPLAY")
 	C.init(C.CString(display))
 
 }
 
-func Get() (int, int, []byte, int, int, int) {
+func CursorGet() (int, int, []byte, int, int, int) {
 	cursorPointer := C.get_mouse_pointer()
 	cursor := *cursorPointer
 	pixels := unsafe.Pointer(cursor.pixels)

@@ -4,13 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/pion/webrtc/v3"
-	"github.com/pion/webrtc/v3/pkg/media"
 	"os"
-	"time"
 )
 
 type WebRtcEndpoint struct {
-	videoTrack *webrtc.TrackLocalStaticSample
+	VideoTrack *webrtc.TrackLocalStaticSample
 	cursor     *webrtc.DataChannel
 }
 
@@ -28,14 +26,13 @@ func (endpoint *WebRtcEndpoint) NewConnection(offer webrtc.SessionDescription) (
 		fmt.Println("Error while NewPeerConnection")
 		panic(err)
 	}
-
 	videoTrack, videoTrackErr := webrtc.NewTrackLocalStaticSample(webrtc.RTPCodecCapability{MimeType: webrtc.MimeTypeH264}, "video", "pion")
 	if videoTrackErr != nil {
 		fmt.Println("Error while NewTackLocalStaticSample")
 		panic(videoTrackErr)
 	}
 
-	endpoint.videoTrack = videoTrack
+	endpoint.VideoTrack = videoTrack
 	rtpSender, videoTrackErr := peerConnection.AddTrack(videoTrack)
 	if videoTrackErr != nil {
 		fmt.Println("Error while AddTrack")
@@ -99,8 +96,4 @@ func (endpoint *WebRtcEndpoint) NewConnection(offer webrtc.SessionDescription) (
 	}
 
 	return *peerConnection.LocalDescription(), iceConnectedCtx
-}
-func (endpoint *WebRtcEndpoint) Write(frame []byte) (n int, err error) {
-	err = endpoint.videoTrack.WriteSample(media.Sample{Data: frame, Duration: time.Second})
-	return len(frame), err
 }

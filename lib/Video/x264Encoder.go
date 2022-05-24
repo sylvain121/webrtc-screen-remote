@@ -62,8 +62,8 @@ type Encoder struct {
 	tpf int64
 }
 
-// NewEncoder returns new x264 encoder.
-func NewEncoder(w io.Writer, opts *Options) (e *Encoder, err error) {
+// NewX264Encoder returns new x264 encoder.
+func NewX264Encoder(w io.Writer, opts *Options) (e *Encoder, err error) {
 	e = &Encoder{}
 
 	e.w = w
@@ -116,7 +116,6 @@ func NewEncoder(w io.Writer, opts *Options) (e *Encoder, err error) {
 	var picIn x264c.Picture
 	x264c.PictureInit(&picIn)
 	e.picIn = picIn
-
 	e.e = x264c.EncoderOpen(&param)
 	if e.e == nil {
 		err = fmt.Errorf("x264: cannot open the encoder")
